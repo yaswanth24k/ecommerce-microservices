@@ -4,7 +4,7 @@ A learning-focused microservices project built with Spring Boot. The goal of thi
 
 ## Tech Stack
 
-* Java 21
+* Java
 * Spring Boot
 * Spring Data JPA
 * MySQL
@@ -12,91 +12,73 @@ A learning-focused microservices project built with Spring Boot. The goal of thi
 * Docker (Planned)
 * Maven
 
-## Project Structure
-
-```text
-ecommerce-microservices/
-│
-├── user-service
-├── product-service (Planned)
-├── order-service (Planned)
-├── payment-service (Planned)
-└── notification-service (Planned)
-```
-
-## Current Progress
+## Services
 
 ### Completed
 
-* User Service
+#### User Service
 
-  * Create User
-  * Get User by ID
-  * Get All Users
-  * Update User
-  * Delete User
+Features:
+
+* Create User
+* Get User by ID
+* Get All Users
+* Update User
+* Delete User
+
+#### Product Service
+
+Features:
+
+* Create Product
+* Get Product by ID
+* Get All Products
+* Update Product
+* Delete Product
 
 ### Planned
 
-* Product Service
 * Order Service
 * Payment Service
 * Notification Service
 * Kafka Integration
 * Docker Compose Setup
 
-## User Service APIs
+## Project Structure
 
-### Create User
-
-```http
-POST /user
+```text
+ecommerce-microservices/
+│
+├── user-service/
+├── product-service/
+├── order-service/          (Planned)
+├── payment-service/        (Planned)
+├── notification-service/   (Planned)
+└── README.md
 ```
 
-Request Body:
+## Current Progress
 
-```json
-{
-  "name": "yaswanth",
-  "email": "yaswanth24k@gmail.com"
-}
-```
-
-### Get User By ID
-
-```http
-GET /user/{id}
-```
-
-### Get All Users
-
-```http
-GET /user
-```
-
-### Update User
-
-```http
-PUT /user/{id}
-```
-
-### Delete User
-
-```http
-DELETE /user/{id}
-```
+* [x] User Service
+* [x] Product Service
+* [ ] Order Service
+* [ ] Service-to-Service Communication
+* [ ] Kafka Integration
+* [ ] Payment Service
+* [ ] Notification Service
+* [ ] Docker Compose
 
 ## Learning Objectives
 
 * Understand microservice architecture
-* Learn Spring Boot service development
-* Implement service-to-service communication
-* Explore event-driven architecture using Kafka
+* Build independent services with Spring Boot
+* Learn service-to-service communication
+* Implement event-driven architecture using Kafka
 * Containerize services using Docker
-* Build a complete e-commerce system using independent services
+* Understand distributed system fundamentals
 
 ## Project Status
 
 🚧 Under Development
 
-This project is being built incrementally as part of a hands-on microservices learning journey.
+Current milestone: User Service and Product Service completed. Next step is implementing the Order Service and establishing communication between services.
