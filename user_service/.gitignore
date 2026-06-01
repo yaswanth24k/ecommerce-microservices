@@ -31,3 +31,15 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Spring configs
+**/application.yml
+**/application.yaml
+**/application.properties
+
+# IntelliJ
+.idea/
+*.iml
+
+# Maven
+**/target/
