@@ -1,84 +1,90 @@
 # Ecommerce Microservices
 
-A learning-focused microservices project built with Spring Boot. The goal of this project is to understand microservice architecture, service decomposition, inter-service communication, event-driven systems with Kafka, and containerization with Docker by building a complete e-commerce application.
+A learning-focused microservices project built using Spring Boot.  
+The goal of this project is to understand how distributed systems work by building an e-commerce backend using microservice architecture.
+
+---
 
 ## Tech Stack
 
-* Java
-* Spring Boot
-* Spring Data JPA
-* MySQL
-* Apache Kafka (Planned)
-* Docker (Planned)
-* Maven
+- Java
+- Spring Boot
+- Spring Data JPA
+- MySQL
+- REST APIs (RestTemplate)
+- Maven
+
+---
 
 ## Services
 
-### Completed
+### ✅ Completed
 
 #### User Service
-
-Features:
-
-* Create User
-* Get User by ID
-* Get All Users
-* Update User
-* Delete User
+- Create User
+- Get User by ID
+- Get All Users
+- Update User
+- Delete User
 
 #### Product Service
+- Create Product
+- Get Product by ID
+- Get All Products
+- Update Product
+- Delete Product
 
-Features:
+#### Order Service
+- Create Order
+- Validate User via User Service
+- Validate Product via Product Service
+- Check Product Stock
+- Save Order
 
-* Create Product
-* Get Product by ID
-* Get All Products
-* Update Product
-* Delete Product
+---
 
-### Planned
+## Microservices Communication
 
-* Order Service
-* Payment Service
-* Notification Service
-* Kafka Integration
-* Docker Compose Setup
+Order Service communicates with:
 
-## Project Structure
+- User Service → to validate user existence
+- Product Service → to validate product and stock
 
-```text
-ecommerce-microservices/
-│
-├── user-service/
-├── product-service/
-├── order-service/          (Planned)
-├── payment-service/        (Planned)
-├── notification-service/   (Planned)
-└── README.md
-```
+Communication type:
+- Synchronous REST calls using RestTemplate
 
-## Current Progress
+---
 
-* [x] User Service
-* [x] Product Service
-* [ ] Order Service
-* [ ] Service-to-Service Communication
-* [ ] Kafka Integration
-* [ ] Payment Service
-* [ ] Notification Service
-* [ ] Docker Compose
+## Current Architecture
 
-## Learning Objectives
+User Service (8080)
+Product Service (8181)
+Order Service (8082)
 
-* Understand microservice architecture
-* Build independent services with Spring Boot
-* Learn service-to-service communication
-* Implement event-driven architecture using Kafka
-* Containerize services using Docker
-* Understand distributed system fundamentals
+Order Service:
+→ Calls User Service
+→ Calls Product Service
+→ Validates request
+→ Stores Order in MySQL
+
+---
+
+## Learning Goals
+
+- Microservice decomposition
+- Inter-service communication
+- REST-based service communication
+- Service validation logic
+- Independent service deployment
+
+---
 
 ## Project Status
 
-🚧 Under Development
+🚧 In Progress
 
-Current milestone: User Service and Product Service completed. Next step is implementing the Order Service and establishing communication between services.
+Next steps:
+- Kafka event-driven architecture
+- Payment Service
+- Notification Service
+- Docker Compose setup
