@@ -4,6 +4,9 @@ import com.example.order_service.config.RestTemplateConfig;
 import com.example.order_service.dto.ProductDto;
 import com.example.order_service.dto.UserDto;
 import com.example.order_service.entity.Order;
+import com.example.order_service.exception.InsufficientStockException;
+import com.example.order_service.exception.ProductNotFoundException;
+import com.example.order_service.exception.UserNotFoundException;
 import com.example.order_service.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,16 +24,17 @@ public class OrderService {
     public Order addorder(Order order) {
         UserDto user = restTemplate.getForObject("http://localhost:8080/user/" + order.getUserid(), UserDto.class);
         if (user == null) {
-            throw new RuntimeException("user not found");
+            throw new UserNotFoundException("User with "+order.getUserid()+"not found");
         }
         ProductDto product = restTemplate.getForObject("http://localhost:8181/products/" + order.getProductid(), ProductDto.class);
         if (product == null) {
-            throw new RuntimeException("product not found");
+            throw new ProductNotFoundException("Product with "+order.getProductid()+"not found");
         }
         if (order.getQuantity()>product.getStock())
         {
-            throw new RuntimeException("insufficient stock");
+            throw new InsufficientStockException("stock is only "+product.getStock());
         }
+        order.setPrice(product.getPrice() * order.getQuantity());
         return orderRepository.save(order);
     }
 
