@@ -59,7 +59,7 @@ Communication type:
 
 User Service (8080)
 Product Service (8181)
-Order Service (8082)
+Order Service (8081)
 
 Order Service:
 → Calls User Service
