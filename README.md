@@ -1,135 +1,183 @@
-# Ecommerce Microservices
+# E-Commerce Microservices
 
-A learning-focused microservices project built with Spring Boot. This project is being developed to understand microservice architecture, service-to-service communication, event-driven systems, and containerization by building a simplified e-commerce application.
+A microservices-based E-Commerce backend application built using Spring Boot, MySQL, Kafka, and Docker.
 
-## Tech Stack
+This project was built to learn and implement core microservice concepts such as service decomposition, inter-service communication, event-driven architecture, and asynchronous messaging using Apache Kafka.
 
-* Java
-* Spring Boot
-* Spring Data JPA
-* MySQL
-* Maven
-* RestTemplate
-* Apache Kafka (Planned)
-* Docker (Planned)
+---
 
 ## Architecture
 
 ```text
-                ┌──────────────┐
-                │ Order Service│
-                └──────┬───────┘
-                       │
-             ┌─────────┴─────────┐
-             │                   │
-             ▼                   ▼
-      User Service       Product Service
+                        +------------------+
+                        |   User Service   |
+                        +------------------+
+                                 ^
+                                 |
+                                 |
++--------+             +------------------+             +------------------+
+| Client | ----------> |   Order Service  | ----------> | Product Service  |
++--------+             +------------------+             +------------------+
+                                |
+                                |
+                                | Publish Event
+                                v
+                         +--------------+
+                         |    Kafka     |
+                         +--------------+
+                           /          \
+                          /            \
+                         v              v
+                +----------------+  +----------------------+
+                | Payment Service|  | Notification Service |
+                +----------------+  +----------------------+
+                         |                    |
+                         v                    v
+                   MySQL Database      Console Notification
 ```
 
-Currently, the Order Service communicates with the User Service and Product Service to validate orders before storing them.
+---
 
 ## Services
 
 ### User Service
 
-Features:
+Responsible for user management.
 
-* Create User
-* Get User by ID
-* Get All Users
-* Update User
-* Delete User
+Features:
+- Create User
+- Get User By ID
+- Get All Users
+- Update User
+- Delete User
+
+---
 
 ### Product Service
 
-Features:
+Responsible for product management.
 
-* Create Product
-* Get Product by ID
-* Get All Products
-* Update Product
-* Delete Product
+Features:
+- Create Product
+- Get Product By ID
+- Get All Products
+- Update Product
+- Delete Product
+
+---
 
 ### Order Service
 
+Responsible for order processing.
+
 Features:
+- Validate User using User Service
+- Validate Product using Product Service
+- Check Product Stock
+- Calculate Total Price
+- Save Order
+- Publish OrderCreatedEvent to Kafka
 
-* Create Order
-* Get Order by ID
-* Get All Orders
-* Update Order
-* Delete Order
-* Validate User Existence
-* Validate Product Existence
-* Validate Product Stock Availability
-* Custom Exception Handling
+---
 
-## Project Structure
+### Payment Service
+
+Consumes OrderCreatedEvent from Kafka.
+
+Features:
+- Receive Order Event
+- Generate Payment Record
+- Store Payment Information in MySQL
+
+---
+
+### Notification Service
+
+Consumes OrderCreatedEvent from Kafka.
+
+Features:
+- Receive Order Event
+- Generate Order Confirmation Notification
+
+---
+
+## Technologies Used
+
+- Java
+- Spring Boot
+- Spring Data JPA
+- MySQL
+- Apache Kafka
+- Docker
+- Maven
+- REST APIs
+
+---
+
+## Event Driven Flow
 
 ```text
-ecommerce-microservices/
-│
-├── user-service/
-├── product-service/
-├── order-service/
-├── payment-service/        (Planned)
-├── notification-service/   (Planned)
-└── README.md
+Order Created
+      |
+      v
+Order Service
+      |
+      v
+Kafka Topic (order-topic)
+      |
+      +--------------------+
+      |                    |
+      v                    v
+Payment Service     Notification Service
+      |                    |
+      v                    v
+Save Payment      Send Notification
 ```
 
-## Current Workflow
+---
 
-When an order is created:
+## Features Implemented
 
-1. Order Service receives the request.
-2. User Service is called to verify the user exists.
-3. Product Service is called to verify the product exists.
-4. Product stock is validated.
-5. Order is saved to the database.
-6. Appropriate exceptions are returned if validation fails.
+- Microservice Architecture
+- Service-to-Service Communication using RestTemplate
+- Event-Driven Architecture using Kafka
+- Kafka Producer
+- Kafka Consumers
+- Global Exception Handling
+- Custom Exceptions
+- MySQL Persistence
+- Independent Databases per Service
 
-## Exception Handling
+---
 
-Implemented using:
+## Future Improvements
 
-* UserNotFoundException
-* ProductNotFoundException
-* InsufficientStockException
-* GlobalExceptionHandler
+- Docker Compose
+- API Gateway
+- Service Discovery (Eureka)
+- Centralized Configuration
+- Distributed Tracing
+- Authentication & Authorization (JWT)
+- Email Notifications
 
-Returns meaningful HTTP responses instead of generic server errors.
+---
 
-## Current Progress
+## Learning Outcomes
 
-* [x] User Service
-* [x] Product Service
-* [x] Order Service
-* [x] REST-based Service-to-Service Communication
-* [x] Business Validation
-* [x] Custom Exception Handling
-* [x] Global Exception Handling
+Through this project I learned:
 
-### Upcoming Features
+- Designing Microservices
+- Synchronous Communication using REST APIs
+- Asynchronous Communication using Apache Kafka
+- Event Publishing and Consumption
+- Database Separation Across Services
+- Exception Handling in Distributed Systems
+- Building Scalable Backend Architectures
 
-* [ ] Kafka Integration
-* [ ] Payment Service
-* [ ] Notification Service
-* [ ] Event-Driven Communication
-* [ ] Docker Compose Setup
-* [ ] API Gateway
-* [ ] Service Discovery
+---
 
-## Learning Objectives
+## Author
 
-* Understand Microservice Architecture
-* Build Independent Services
-* Implement Service-to-Service Communication
-* Learn Event-Driven Architecture with Kafka
-* Containerize Applications using Docker
-* Explore Distributed System Concepts
+Sai Yaswanth
 
-## Project Status
-
-🚧 Under Development
-
-Current milestone: Three independent microservices are implemented and communicating through REST APIs. The next phase is introducing Kafka for asynchronous communication between services.
+GitHub: https://github.com/yaswanth24k
