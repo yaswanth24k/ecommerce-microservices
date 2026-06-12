@@ -1,9 +1,10 @@
 package com.example.order_service.service;
 
-import com.example.order_service.config.RestTemplateConfig;
 import com.example.order_service.dto.ProductDto;
 import com.example.order_service.dto.UserDto;
 import com.example.order_service.entity.Order;
+import com.example.order_service.event.OrderCreatedEvent;
+import com.example.order_service.producer.OrderProducer;
 import com.example.order_service.exception.InsufficientStockException;
 import com.example.order_service.exception.ProductNotFoundException;
 import com.example.order_service.exception.UserNotFoundException;
@@ -21,8 +22,12 @@ public class OrderService {
     @Autowired
     RestTemplate restTemplate;
 
+    @Autowired
+    OrderProducer orderProducer;
+
     public Order addorder(Order order) {
-        UserDto user = restTemplate.getForObject("http://localhost:8080/user/" + order.getUserid(), UserDto.class);
+
+        UserDto user = restTemplate.getForObject("http://localhost:8080/users/" + order.getUserid(), UserDto.class);
         if (user == null) {
             throw new UserNotFoundException("User with "+order.getUserid()+"not found");
         }
@@ -35,7 +40,17 @@ public class OrderService {
             throw new InsufficientStockException("stock is only "+product.getStock());
         }
         order.setPrice(product.getPrice() * order.getQuantity());
-        return orderRepository.save(order);
+        Order savedorder=orderRepository.save(order);
+        OrderCreatedEvent event=new OrderCreatedEvent(savedorder.getId(),
+                                                      savedorder.getUserid(),
+                                                      savedorder.getProductid(),
+                                                       savedorder.getQuantity(),
+                                                        savedorder.getPrice());
+        System.out.println("Before Kafka Send");
+        orderProducer.publishOrderCreated(event);
+        System.out.println("After Kafka Send");
+        return savedorder;
+
     }
 
     public Order getorder(Long id) {

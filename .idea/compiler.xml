@@ -3,22 +3,44 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Annotation profile for user-service" enabled="true">
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+      </profile>
+      <profile name="Annotation profile for payment_services" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
         </processorPath>
-        <module name="product_service" />
-        <module name="user-service" />
+        <module name="payment_services" />
         <module name="order_service" />
+        <module name="user-service" />
+        <module name="product_service" />
+      </profile>
+      <profile name="Annotation profile for notification_services" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
+        </processorPath>
+        <module name="notification_services" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="notification_service" target="1.5" />
+      <module name="payment" target="24" />
+      <module name="payment_service" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="notification_services" options="-parameters" />
       <module name="order_service" options="-parameters" />
+      <module name="payment_services" options="-parameters" />
       <module name="product_service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
