@@ -7,45 +7,7 @@ This project demonstrates event-driven architecture in a simplified e-commerce w
 
 ## 🚀 Architecture Overview
 
-
-                    🛒 E-COMMERCE MICROSERVICES ARCHITECTURE
-
-┌────────────────────────────────────────────────────────────────────┐
-│                            CLIENT                                  │
-└────────────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-                    ┌──────────────────────┐
-                    │   USER SERVICE      │
-                    │  (Spring Boot)      │
-                    └─────────┬────────────┘
-                              │
-                              ▼
-                    ┌──────────────────────┐
-                    │ PRODUCT SERVICE     │
-                    │  (Spring Boot)      │
-                    └─────────┬────────────┘
-                              │
-                              ▼
-                    ┌──────────────────────┐
-                    │   ORDER SERVICE     │
-                    │  (Spring Boot)      │
-                    └─────────┬────────────┘
-                              │
-            REST Calls        │        Kafka Event (order-topic)
-        ┌─────────────────────┘─────────────────────┐
-        ▼                                           ▼
-┌──────────────────────┐                 ┌──────────────────────┐
-│   MYSQL DATABASE     │                 │        KAFKA         │
-│ (All Services DB)    │                 │  Event Broker        │
-└──────────────────────┘                 └─────────┬────────────┘
-                                                   │
-                              ┌────────────────────┴────────────────────┐
-                              ▼                                         ▼
-                 ┌──────────────────────┐                 ┌──────────────────────┐
-                 │ PAYMENT SERVICE      │                 │ NOTIFICATION SERVICE │
-                 │ (Kafka Consumer)     │                 │ (Kafka Consumer)     │
-                 └──────────────────────┘                 └──────────────────────┘
+<img width="1536" height="1024" alt="ChatGPT Image Jun 22, 2026, 10_03_25 PM" src="https://github.com/user-attachments/assets/9f81bf66-617c-4c08-903b-90e78c921f93" />
 
 ## 🧱 Microservices
 
