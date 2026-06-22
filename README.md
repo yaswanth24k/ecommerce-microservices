@@ -1,115 +1,168 @@
-🛒 E-Commerce Microservices System (Spring Boot + Kafka + Docker)
+# 🛒 E-Commerce Microservices System (Spring Boot + Kafka + Docker)
 
-A distributed e-commerce backend system built using Spring Boot microservices architecture, demonstrating event-driven communication using Kafka, containerized using Docker & Docker Compose.
+A **distributed microservices-based e-commerce backend system** built for learning and demonstrating real-world backend architecture using **Spring Boot, Kafka, MySQL, and Docker Compose**.
 
-This project simulates a real-world scalable backend system where services operate independently and communicate asynchronously.
+This project simulates a simplified e-commerce platform where services communicate asynchronously using **event-driven architecture (Kafka)**.
 
-🚀 Architecture Overview
+---
 
-The system is composed of the following microservices:
+# 🚀 System Overview
 
-User Service → Manages user data
-Product Service → Manages product catalog and inventory
-Order Service → Handles order placement and validation
-Payment Service → Processes payments based on order events
-Notification Service → Sends order notifications via Kafka events
-🧩 System Design
-🔄 Flow of the System
-User places an order
-Order Service:
-Validates User (via REST call)
-Validates Product (via REST call)
-Calculates total price
-Saves order in database
-Publishes OrderCreatedEvent to Kafka
-Kafka distributes event to:
-💳 Payment Service → Creates payment record
-📢 Notification Service → Sends order confirmation message
-🛠️ Tech Stack
-Backend: Spring Boot
-Microservices Communication: REST + Kafka
-Database: MySQL
-Messaging Broker: Apache Kafka
-Containerization: Docker, Docker Compose
-ORM: Spring Data JPA / Hibernate
-Build Tool: Maven
-📦 Services & Ports
-Service	Port
-User Service	8081
-Product Service	8082
-Order Service	8083
-Payment Service	8282
-Notification Service	8383
-Kafka	9092
-MySQL	3307
-⚙️ How to Run (Dockerized Setup)
-1. Clone the repository
-git clone https://github.com/yaswanth24k/ecommerce-microservices.git
-cd ecommerce-microservices
-2. Build and start all services
-docker compose up --build
-3. Stop all services
-docker compose down
-🧪 Example Order Request
+This system consists of 5 independent microservices:
+
+### 👤 User Service
+- Manages users
+- CRUD operations for user data
+
+### 📦 Product Service
+- Manages products
+- Tracks price and stock
+
+### 🧾 Order Service
+- Core service
+- Validates user & product using REST calls
+- Creates orders
+- Publishes order events to Kafka
+
+### 💳 Payment Service
+- Consumes order events from Kafka
+- Creates payment records automatically
+- Simulates payment processing
+
+### 🔔 Notification Service
+- Consumes order events from Kafka
+- Prints order confirmation notifications
+
+---
+
+# 🧱 Architecture Diagram
+
+            ┌────────────────────┐
+            │   User Service     │
+            │  (Spring Boot)     │
+            └─────────┬──────────┘
+                      │
+                      │ REST API
+                      ▼
+            ┌────────────────────┐
+            │  Order Service     │
+            │  (Spring Boot)     │
+            └─────────┬──────────┘
+                      │
+                      │ Kafka Event (order-topic)
+                      ▼
+    ┌──────────────────────────────┐
+    │            Kafka             │
+    └──────────────┬───────────────┘
+                   │
+     ┌─────────────┴─────────────┐
+     ▼                           ▼
+
+┌──────────────────┐ ┌────────────────────┐
+│ Payment Service │ │ Notification Service│
+│ (Consumer) │ │ (Consumer) │
+└──────────────────┘ └────────────────────┘
+
+                      ▲
+                      │ REST API
+                      │
+            ┌────────────────────┐
+            │ Product Service    │
+            │ (Spring Boot)      │
+            └────────────────────┘
+
+            ┌────────────────────┐
+            │   MySQL Database   │
+            └────────────────────┘
+
+---
+
+# ⚙️ Tech Stack
+
+- Java 24
+- Spring Boot
+- Spring Data JPA
+- Spring Web
+- Apache Kafka
+- MySQL 8
+- Docker & Docker Compose
+- REST Template (Service Communication)
+
+---
+
+# 📡 Communication Flow
+
+### Order Placement Flow:
+
+1. Client calls **Order Service**
+2. Order Service:
+   - Validates user via User Service (REST)
+   - Validates product via Product Service (REST)
+   - Calculates total price
+   - Saves order in DB
+3. Order Service publishes event → `order-topic` (Kafka)
+4. Payment Service consumes event:
+   - Creates payment record
+5. Notification Service consumes event:
+   - Prints confirmation message
+
+---
+
+# 📦 Sample Order Request
+
+```json
 POST /orders
 {
   "userid": 1,
   "productid": 1,
-  "quantity": 2,
-  "price": 199999
+  "quantity": 2
 }
-📡 Event-Driven Architecture
-Kafka Topic
-order-topic
-Event Payload Example
-{
-  "orderid": 14,
-  "userid": 2,
-  "productid": 1,
-  "quantity": 2,
-  "price": 399998
-}
-💳 Payment Service Behavior
-Listens to order-topic
-Creates payment record automatically
-Stores:
-orderId
-userId
-amount
-status = SUCCESS
-📢 Notification Service Behavior
-Listens to order-topic
-Prints real-time order confirmation:
-========== NOTIFICATION SERVICE ==========
-Order Placed Successfully!
-Order ID: 14
-User ID: 2
-Total Amount: 399998
-=========================================
-🐳 Docker Setup
+🐳 Running the Project (Docker Compose)
+1. Build JAR files
 
-The system includes:
+Run in each service:
 
-MySQL container (persistent volume)
-Kafka + Zookeeper containers
-5 Spring Boot microservices
+mvn clean package
+2. Start everything
 
-All services are orchestrated using:
+From project root:
 
-docker-compose.yml
-📌 Key Learnings
-Microservices architecture design
-REST + Kafka hybrid communication
-Event-driven system design
-Docker container orchestration
-Service decoupling & scalability patterns
+docker compose up --build
+3. Stop system
+docker compose down
+🗄️ Database
+MySQL runs in Docker
+Auto table creation enabled using Hibernate (ddl-auto=update)
+Separate schema per service
+🧠 Key Features
+Microservices architecture
+REST-based inter-service communication
+Event-driven architecture using Kafka
+Containerized deployment using Docker
+Real-time order processing flow
+Separation of concerns per service
 📈 Future Improvements
 API Gateway (Spring Cloud Gateway)
 Service Discovery (Eureka)
-Centralized logging (ELK stack)
-Resilience (Resilience4j)
+Centralized Config Server
 JWT Authentication
-Monitoring (Prometheus + Grafana)
-⭐ Author
+Distributed tracing (Zipkin / Sleuth)
+Kubernetes deployment
+Retry & Dead Letter Queue for Kafka
+🧑‍💻 Author
 
 Yaswanth
+
+GitHub: https://github.com/yaswanth24k
+
+⭐ Learning Outcome
+
+This project demonstrates:
+
+Real-world backend system design
+Event-driven microservices communication
+Containerized development workflow
+Integration of Kafka with Spring Boot
+Multi-service orchestration using Docker Compose
+
+---
