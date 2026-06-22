@@ -15,7 +15,7 @@ public class OrderConsumer {
 
     @KafkaListener(
             topics = "order-topic",
-            groupId = "payment-group"
+            groupId = "payment-group-test"
     )
     public void consume(OrderReceiveEvent event) {
 

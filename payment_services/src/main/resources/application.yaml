@@ -3,10 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/paymentdb
+    url: jdbc:mysql://mysql:3306/paymentdb
     username: root
-    password: gta vc vv 0928
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: gtavcvv0928
 
   jpa:
     hibernate:
@@ -14,13 +13,12 @@ spring:
     show-sql: true
 
   kafka:
-    bootstrap-servers: localhost:9092
-
+    bootstrap-servers: kafka:9092
     consumer:
       group-id: payment-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-
       properties:
         spring.json.trusted.packages: "*"
+        spring.json.value.default.type: com.example.payment_services.event.OrderReceiveEvent

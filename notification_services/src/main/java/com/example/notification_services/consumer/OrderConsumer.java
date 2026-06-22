@@ -9,7 +9,7 @@ public class OrderConsumer {
 
     @KafkaListener(
             topics = "order-topic",
-            groupId = "notification-group"
+            groupId = "notification-group-test"
     )
     public void consume(OrderReceiveEvent event) {
         System.out.println("\n========== NOTIFICATION SERVICE ==========");

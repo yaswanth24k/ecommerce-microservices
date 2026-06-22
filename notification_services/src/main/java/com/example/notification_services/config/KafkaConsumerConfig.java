@@ -27,8 +27,8 @@ public class KafkaConsumerConfig {
 
         Map<String, Object> config = new HashMap<>();
 
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "notification-group");
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "host.docker.internal:9092");
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, "notification-group-test");
 
         return new DefaultKafkaConsumerFactory<>(
                 config,
