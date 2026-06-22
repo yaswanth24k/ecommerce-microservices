@@ -8,24 +8,44 @@ This project demonstrates event-driven architecture in a simplified e-commerce w
 ## 🚀 Architecture Overview
 
 
-Client
-│
-▼
-User Service ───────────────┐
-│ │
-▼ ▼
-Product Service Order Service
-│
-▼
-Kafka (order-topic)
-/
-▼ ▼
-Payment Service Notification Service
+                    🛒 E-COMMERCE MICROSERVICES ARCHITECTURE
 
-All services use MySQL (Docker container)
-
-
----
+┌────────────────────────────────────────────────────────────────────┐
+│                            CLIENT                                  │
+└────────────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+                    ┌──────────────────────┐
+                    │   USER SERVICE      │
+                    │  (Spring Boot)      │
+                    └─────────┬────────────┘
+                              │
+                              ▼
+                    ┌──────────────────────┐
+                    │ PRODUCT SERVICE     │
+                    │  (Spring Boot)      │
+                    └─────────┬────────────┘
+                              │
+                              ▼
+                    ┌──────────────────────┐
+                    │   ORDER SERVICE     │
+                    │  (Spring Boot)      │
+                    └─────────┬────────────┘
+                              │
+            REST Calls        │        Kafka Event (order-topic)
+        ┌─────────────────────┘─────────────────────┐
+        ▼                                           ▼
+┌──────────────────────┐                 ┌──────────────────────┐
+│   MYSQL DATABASE     │                 │        KAFKA         │
+│ (All Services DB)    │                 │  Event Broker        │
+└──────────────────────┘                 └─────────┬────────────┘
+                                                   │
+                              ┌────────────────────┴────────────────────┐
+                              ▼                                         ▼
+                 ┌──────────────────────┐                 ┌──────────────────────┐
+                 │ PAYMENT SERVICE      │                 │ NOTIFICATION SERVICE │
+                 │ (Kafka Consumer)     │                 │ (Kafka Consumer)     │
+                 └──────────────────────┘                 └──────────────────────┘
 
 ## 🧱 Microservices
 
