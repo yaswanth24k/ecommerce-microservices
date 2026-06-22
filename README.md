@@ -1,183 +1,118 @@
-# E-Commerce Microservices
+🛒 E-Commerce Microservices System (Spring Boot + Kafka + Docker)
 
-A microservices-based E-Commerce backend application built using Spring Boot, MySQL, Kafka, and Docker.
+A scalable event-driven microservices-based e-commerce backend system built using Spring Boot, Kafka, MySQL, and Docker.
+The system demonstrates synchronous REST communication + asynchronous event-driven architecture.
 
-This project was built to learn and implement core microservice concepts such as service decomposition, inter-service communication, event-driven architecture, and asynchronous messaging using Apache Kafka.
+🚀 Architecture Overview
 
----
+The system consists of 5 microservices:
 
-## Architecture
+User Service → Manages users
+Product Service → Manages products and inventory
+Order Service → Handles order creation and validation
+Payment Service → Processes payments (Kafka consumer)
+Notification Service → Sends order notifications (Kafka consumer)
+🔄 Communication Flow
+User Service        Product Service
+\               /
+→ Order Service → Kafka Topic (order-topic)
+↓
+-------------------------
+|                       |
+Payment Service       Notification Service
+⚙️ Tech Stack
+Java 24
+Spring Boot
+Spring Data JPA
+Spring Kafka
+MySQL
+Apache Kafka
+Docker & Docker Compose
+REST APIs
+📦 Microservices
+Service	Port	Description
+User Service	8081	User management
+Product Service	8181	Product & stock management
+Order Service	8083	Order creation + event producer
+Payment Service	8282	Kafka consumer → payment processing
+Notification Service	8383	Kafka consumer → notifications
+🧠 Key Features
+Microservices architecture
+REST + Kafka hybrid communication
+Event-driven order processing
+MySQL per service schema
+Dockerized deployment
+Automatic JSON serialization with Kafka
+Global exception handling
+🐳 Run with Docker
+1. Clone the repository
+   git clone https://github.com/<your-username>/ecommerce-microservices.git
+   cd ecommerce-microservices
+2. Start the system
+   docker compose up --build
+3. Services will be available at:
+   User Service → http://localhost:8081
+   Product Service → http://localhost:8181
+   Order Service → http://localhost:8083
+   Payment Service → http://localhost:8282
+   Notification Service → http://localhost:8383
+   Kafka → localhost:9092
+   MySQL → localhost:3307
+   🧾 Example Flow
+1. Create Order
+   POST /orders
+2. Order Service Actions:
+   Validates user (User Service)
+   Validates product & stock (Product Service)
+   Calculates price
+   Saves order in DB
+   Publishes event → order-topic
+3. Kafka Consumers:
+   Payment Service
+   Consumes order event
+   Creates payment record
+   Stores in MySQL
+   Notification Service
+   Consumes order event
+   Prints notification message
+   📊 Example Output
+   Notification Service
+   ORDER PLACED SUCCESSFULLY
+   Order ID: 14
+   User ID: 2
+   Total Amount: 199999.0
+   🗄️ Database Design
 
-```text
-                        +------------------+
-                        |   User Service   |
-                        +------------------+
-                                 ^
-                                 |
-                                 |
-+--------+             +------------------+             +------------------+
-| Client | ----------> |   Order Service  | ----------> | Product Service  |
-+--------+             +------------------+             +------------------+
-                                |
-                                |
-                                | Publish Event
-                                v
-                         +--------------+
-                         |    Kafka     |
-                         +--------------+
-                           /          \
-                          /            \
-                         v              v
-                +----------------+  +----------------------+
-                | Payment Service|  | Notification Service |
-                +----------------+  +----------------------+
-                         |                    |
-                         v                    v
-                   MySQL Database      Console Notification
-```
+Each service has its own schema:
 
----
+userdb
+productdb
+orderdb
+paymentdb
+🧱 Docker Setup
 
-## Services
+Includes:
 
-### User Service
+MySQL container
+Kafka container
+Zookeeper container
+5 Spring Boot services
+📌 Future Improvements
+API Gateway (Spring Cloud Gateway)
+Service Discovery (Eureka)
+Circuit Breaker (Resilience4j)
+Centralized Logging (ELK stack)
+Distributed tracing (Zipkin)
+JWT Authentication
+👨‍💻 Author
 
-Responsible for user management.
+Built by Sai Yaswanth
+Backend Developer | Microservices | Kafka | Spring Boot
 
-Features:
-- Create User
-- Get User By ID
-- Get All Users
-- Update User
-- Delete User
+⭐ If you like this project
 
----
+Feel free to:
 
-### Product Service
-
-Responsible for product management.
-
-Features:
-- Create Product
-- Get Product By ID
-- Get All Products
-- Update Product
-- Delete Product
-
----
-
-### Order Service
-
-Responsible for order processing.
-
-Features:
-- Validate User using User Service
-- Validate Product using Product Service
-- Check Product Stock
-- Calculate Total Price
-- Save Order
-- Publish OrderCreatedEvent to Kafka
-
----
-
-### Payment Service
-
-Consumes OrderCreatedEvent from Kafka.
-
-Features:
-- Receive Order Event
-- Generate Payment Record
-- Store Payment Information in MySQL
-
----
-
-### Notification Service
-
-Consumes OrderCreatedEvent from Kafka.
-
-Features:
-- Receive Order Event
-- Generate Order Confirmation Notification
-
----
-
-## Technologies Used
-
-- Java
-- Spring Boot
-- Spring Data JPA
-- MySQL
-- Apache Kafka
-- Docker
-- Maven
-- REST APIs
-
----
-
-## Event Driven Flow
-
-```text
-Order Created
-      |
-      v
-Order Service
-      |
-      v
-Kafka Topic (order-topic)
-      |
-      +--------------------+
-      |                    |
-      v                    v
-Payment Service     Notification Service
-      |                    |
-      v                    v
-Save Payment      Send Notification
-```
-
----
-
-## Features Implemented
-
-- Microservice Architecture
-- Service-to-Service Communication using RestTemplate
-- Event-Driven Architecture using Kafka
-- Kafka Producer
-- Kafka Consumers
-- Global Exception Handling
-- Custom Exceptions
-- MySQL Persistence
-- Independent Databases per Service
-
----
-
-## Future Improvements
-
-- Docker Compose
-- API Gateway
-- Service Discovery (Eureka)
-- Centralized Configuration
-- Distributed Tracing
-- Authentication & Authorization (JWT)
-- Email Notifications
-
----
-
-## Learning Outcomes
-
-Through this project I learned:
-
-- Designing Microservices
-- Synchronous Communication using REST APIs
-- Asynchronous Communication using Apache Kafka
-- Event Publishing and Consumption
-- Database Separation Across Services
-- Exception Handling in Distributed Systems
-- Building Scalable Backend Architectures
-
----
-
-## Author
-
-Sai Yaswanth
-
-GitHub: https://github.com/yaswanth24k
+⭐ Star the repo
+🍴 Fork it
+🧠 Improve it
