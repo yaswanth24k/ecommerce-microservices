@@ -1,118 +1,115 @@
 🛒 E-Commerce Microservices System (Spring Boot + Kafka + Docker)
 
-A scalable event-driven microservices-based e-commerce backend system built using Spring Boot, Kafka, MySQL, and Docker.
-The system demonstrates synchronous REST communication + asynchronous event-driven architecture.
+A distributed e-commerce backend system built using Spring Boot microservices architecture, demonstrating event-driven communication using Kafka, containerized using Docker & Docker Compose.
+
+This project simulates a real-world scalable backend system where services operate independently and communicate asynchronously.
 
 🚀 Architecture Overview
 
-The system consists of 5 microservices:
+The system is composed of the following microservices:
 
-User Service → Manages users
-Product Service → Manages products and inventory
-Order Service → Handles order creation and validation
-Payment Service → Processes payments (Kafka consumer)
-Notification Service → Sends order notifications (Kafka consumer)
-🔄 Communication Flow
-User Service        Product Service
-\               /
-→ Order Service → Kafka Topic (order-topic)
-↓
--------------------------
-|                       |
-Payment Service       Notification Service
-⚙️ Tech Stack
-Java 24
-Spring Boot
-Spring Data JPA
-Spring Kafka
-MySQL
-Apache Kafka
-Docker & Docker Compose
-REST APIs
-📦 Microservices
-Service	Port	Description
-User Service	8081	User management
-Product Service	8181	Product & stock management
-Order Service	8083	Order creation + event producer
-Payment Service	8282	Kafka consumer → payment processing
-Notification Service	8383	Kafka consumer → notifications
-🧠 Key Features
-Microservices architecture
-REST + Kafka hybrid communication
-Event-driven order processing
-MySQL per service schema
-Dockerized deployment
-Automatic JSON serialization with Kafka
-Global exception handling
-🐳 Run with Docker
+User Service → Manages user data
+Product Service → Manages product catalog and inventory
+Order Service → Handles order placement and validation
+Payment Service → Processes payments based on order events
+Notification Service → Sends order notifications via Kafka events
+🧩 System Design
+🔄 Flow of the System
+User places an order
+Order Service:
+Validates User (via REST call)
+Validates Product (via REST call)
+Calculates total price
+Saves order in database
+Publishes OrderCreatedEvent to Kafka
+Kafka distributes event to:
+💳 Payment Service → Creates payment record
+📢 Notification Service → Sends order confirmation message
+🛠️ Tech Stack
+Backend: Spring Boot
+Microservices Communication: REST + Kafka
+Database: MySQL
+Messaging Broker: Apache Kafka
+Containerization: Docker, Docker Compose
+ORM: Spring Data JPA / Hibernate
+Build Tool: Maven
+📦 Services & Ports
+Service	Port
+User Service	8081
+Product Service	8082
+Order Service	8083
+Payment Service	8282
+Notification Service	8383
+Kafka	9092
+MySQL	3307
+⚙️ How to Run (Dockerized Setup)
 1. Clone the repository
-   git clone https://github.com/<your-username>/ecommerce-microservices.git
-   cd ecommerce-microservices
-2. Start the system
-   docker compose up --build
-3. Services will be available at:
-   User Service → http://localhost:8081
-   Product Service → http://localhost:8181
-   Order Service → http://localhost:8083
-   Payment Service → http://localhost:8282
-   Notification Service → http://localhost:8383
-   Kafka → localhost:9092
-   MySQL → localhost:3307
-   🧾 Example Flow
-1. Create Order
-   POST /orders
-2. Order Service Actions:
-   Validates user (User Service)
-   Validates product & stock (Product Service)
-   Calculates price
-   Saves order in DB
-   Publishes event → order-topic
-3. Kafka Consumers:
-   Payment Service
-   Consumes order event
-   Creates payment record
-   Stores in MySQL
-   Notification Service
-   Consumes order event
-   Prints notification message
-   📊 Example Output
-   Notification Service
-   ORDER PLACED SUCCESSFULLY
-   Order ID: 14
-   User ID: 2
-   Total Amount: 199999.0
-   🗄️ Database Design
+git clone https://github.com/yaswanth24k/ecommerce-microservices.git
+cd ecommerce-microservices
+2. Build and start all services
+docker compose up --build
+3. Stop all services
+docker compose down
+🧪 Example Order Request
+POST /orders
+{
+  "userid": 1,
+  "productid": 1,
+  "quantity": 2,
+  "price": 199999
+}
+📡 Event-Driven Architecture
+Kafka Topic
+order-topic
+Event Payload Example
+{
+  "orderid": 14,
+  "userid": 2,
+  "productid": 1,
+  "quantity": 2,
+  "price": 399998
+}
+💳 Payment Service Behavior
+Listens to order-topic
+Creates payment record automatically
+Stores:
+orderId
+userId
+amount
+status = SUCCESS
+📢 Notification Service Behavior
+Listens to order-topic
+Prints real-time order confirmation:
+========== NOTIFICATION SERVICE ==========
+Order Placed Successfully!
+Order ID: 14
+User ID: 2
+Total Amount: 399998
+=========================================
+🐳 Docker Setup
 
-Each service has its own schema:
+The system includes:
 
-userdb
-productdb
-orderdb
-paymentdb
-🧱 Docker Setup
+MySQL container (persistent volume)
+Kafka + Zookeeper containers
+5 Spring Boot microservices
 
-Includes:
+All services are orchestrated using:
 
-MySQL container
-Kafka container
-Zookeeper container
-5 Spring Boot services
-📌 Future Improvements
+docker-compose.yml
+📌 Key Learnings
+Microservices architecture design
+REST + Kafka hybrid communication
+Event-driven system design
+Docker container orchestration
+Service decoupling & scalability patterns
+📈 Future Improvements
 API Gateway (Spring Cloud Gateway)
 Service Discovery (Eureka)
-Circuit Breaker (Resilience4j)
-Centralized Logging (ELK stack)
-Distributed tracing (Zipkin)
+Centralized logging (ELK stack)
+Resilience (Resilience4j)
 JWT Authentication
-👨‍💻 Author
+Monitoring (Prometheus + Grafana)
+⭐ Author
 
-Built by Sai Yaswanth
-Backend Developer | Microservices | Kafka | Spring Boot
-
-⭐ If you like this project
-
-Feel free to:
-
-⭐ Star the repo
-🍴 Fork it
-🧠 Improve it
+Yaswanth
